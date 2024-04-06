@@ -7,9 +7,9 @@ and analysis purposes. The data is sourced from ergast.com, a website dedicated 
 Data transformation and analysis were performed using Azure Databricks. The entire process is orchestrated using Azure Data Factory.
 
 ## Solution Architecture 
-![alt text](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/main/imgs/Solution%20arch.PNG)
+![alt text](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/main/imgs/solution_arch.png)
 
-The structure of the database is shown in the following ER Diagram and explained in the [ERD Diagram](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/main/imgs/ER%20diagram.png)
+The structure of the database is shown in the following ER Diagram and explained in the [ERD Diagram](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/main/imgs/data_model.png)
 
 ## Project Requirements
 The requirements for this project is broken down into six different parts which are;
