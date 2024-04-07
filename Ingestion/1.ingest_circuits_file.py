@@ -4,6 +4,19 @@
 
 # COMMAND ----------
 
+dbutils.widgets.text("p_data_source", "")
+v_data_source = dbutils.widgets.get("p_data_source")
+
+# COMMAND ----------
+
+# MAGIC %run "../includes/configuration"
+
+# COMMAND ----------
+
+# MAGIC %run "../includes/common_functions"
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ##### Step 1 - Read CSV file using spark dataframe reader
 
@@ -38,7 +51,7 @@ schema = StructType(fields=[StructField('circuitId',IntegerType(), False),
 circuits_df = spark.read\
 .option('header',True)\
 .schema(schema)\
-.csv('dbfs:/mnt/forumla1dl/raw/circuits.csv')
+.csv(f'{raw_folder_path}/circuits.csv')
 
 # COMMAND ----------
 
@@ -74,11 +87,16 @@ display(circuits_selected_df)
 
 # COMMAND ----------
 
+from pyspark.sql.functions import lit
+
+# COMMAND ----------
+
 circuits_renamed_df = circuits_selected_df.withColumnRenamed("circuitId","circuit_id")\
     .withColumnRenamed("circuitRef","circuit_ref")\
     .withColumnRenamed("lat","latitude")\
     .withColumnRenamed("lng","longitude")\
-    .withColumnRenamed("alt","altitude")
+    .withColumnRenamed("alt","altitude")\
+    .withColumn("data_source", lit(v_data_source))
 
 display(circuits_renamed_df)
 
@@ -89,11 +107,7 @@ display(circuits_renamed_df)
 
 # COMMAND ----------
 
-from pyspark.sql.functions import current_timestamp
-
-# COMMAND ----------
-
-circuits_final_df = circuits_renamed_df.withColumn("ingestion_date", current_timestamp())
+circuits_final_df = add_ingestion_date(circuits_renamed_df)
 display(circuits_final_df)
 
 # COMMAND ----------
@@ -103,5 +117,9 @@ display(circuits_final_df)
 
 # COMMAND ----------
 
-circuits_final_df.write.mode("overwrite").parquet("/mnt/forumla1dl/processed/circuits")
-display(spark.read.parquet("/mnt/forumla1dl/processed/circuits"))
+circuits_final_df.write.mode("overwrite").parquet(f"{processed_folder_path}/circuits")
+display(spark.read.parquet(f"{processed_folder_path}/circuits"))
+
+# COMMAND ----------
+
+dbutils.notebook.exit("Success")
