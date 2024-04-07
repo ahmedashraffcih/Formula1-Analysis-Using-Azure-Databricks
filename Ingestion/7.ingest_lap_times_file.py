@@ -9,6 +9,11 @@ v_data_source = dbutils.widgets.get("p_data_source")
 
 # COMMAND ----------
 
+dbutils.widgets.text("p_file_date", "2021-03-21")
+v_file_date = dbutils.widgets.get("p_file_date")
+
+# COMMAND ----------
+
 # MAGIC %run "../includes/configuration"
 
 # COMMAND ----------
@@ -33,7 +38,7 @@ schema = StructType(fields=[StructField("raceId", IntegerType(), False),
 
 lap_times_df = spark.read\
 .schema(schema)\
-.csv(f"{raw_folder_path}/lap_times")
+.csv(f"{raw_folder_path}/{v_file_date}/lap_times")
 
 display(lap_times_df)
 
@@ -56,7 +61,8 @@ from pyspark.sql.functions import lit
 
 lap_times_final_df = lap_times_with_ingestion_date_df.withColumnRenamed("raceId","race_id")\
                                 .withColumnRenamed("driverId","driver_id")\
-                                .withColumn("data_source", lit(v_data_source))
+                                .withColumn("data_source", lit(v_data_source))\
+                                .withColumn("file_date", lit(v_file_date))
 
 display(lap_times_final_df)
 
@@ -67,8 +73,7 @@ display(lap_times_final_df)
 
 # COMMAND ----------
 
-lap_times_final_df.write.mode("overwrite").format("parquet").saveAsTable("f1_processed.lap_times")
-display(spark.read.parquet(f"{processed_folder_path}/lap_times"))
+overwrite_partition(lap_times_final_df, 'f1_processed', 'lap_times', 'race_id')
 
 # COMMAND ----------
 
