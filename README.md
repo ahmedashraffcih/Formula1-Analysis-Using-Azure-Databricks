@@ -7,7 +7,7 @@ and analysis purposes. The data is sourced from ergast.com, a website dedicated 
 Data transformation and analysis were performed using Azure Databricks. The entire process is orchestrated using Azure Data Factory.
 
 ## Solution Architecture 
-![alt text](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/main/imgs/solution_arch.png)
+![Solution Architecture ](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/main/imgs/solution_arch.png)
 
 The structure of the database is shown in the following ER Diagram and explained in the [ERD Diagram](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/main/imgs/data_model.png)
 
@@ -38,9 +38,11 @@ Ingest all 8 files into Azure data lake.
 
 ## Databricks Reports
 
-![alt text](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/main/imgs/Dominant%20Driver.PNG)
+![dominant_drivers](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/main/imgs/dominant_drivers.PNG)
+![alt text](https://adb-8171827356927715.15.azuredatabricks.net/?o=8171827356927715#notebook/319754580399671/dashboard/319754580399698/present)
 
-![alt text](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/main/imgs/Dominant%20Team.PNG)
+
+![dominant_teams](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/main/imgs/dominant_teams.PNG)
 
 ## Data Factory Pipeline
 
