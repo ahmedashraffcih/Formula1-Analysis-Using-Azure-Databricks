@@ -7,9 +7,9 @@ and analysis purposes. The data is sourced from ergast.com, a website dedicated 
 Data transformation and analysis were performed using Azure Databricks. The entire process is orchestrated using Azure Data Factory.
 
 ## Solution Architecture 
-![Solution Architecture ](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/main/imgs/solution_arch.png)
+![Solution Architecture ](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/solution_arch.png)
 
-The structure of the database is shown in the following ER Diagram and explained in the [ERD Diagram](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/main/imgs/data_model.png)
+The structure of the database is shown in the following ER Diagram and explained in the [ERD Diagram](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/data_model.png)
 
 ## Project Requirements
 The requirements for this project is broken down into six different parts which are;
@@ -38,20 +38,20 @@ Ingest all 8 files into Azure data lake.
 
 ## Databricks Reports
 
-![dominant_drivers](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/main/imgs/dominant_drivers.PNG)
+![dominant_drivers](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/dominant_drivers.PNG)
 ![alt text](https://adb-8171827356927715.15.azuredatabricks.net/?o=8171827356927715#notebook/319754580399671/dashboard/319754580399698/present)
 
 
-![dominant_teams](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/main/imgs/dominant_teams.PNG)
+![dominant_teams](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/dominant_teams.PNG)
 
 ## Data Factory Pipeline
 
 #### pl_process_formula1_data
-![alt text](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/main/imgs/pl_process_formula1_data.PNG)
+![alt text](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/pl_process_formula1_data.PNG)
 
 #### pl_ingest_formula1_data
-![alt text](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/main/imgs/pl_ingest_formula1_data.PNG)
+![alt text](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/pl_ingest_formula1_data.PNG)
 
 #### pl_tranform_formula1_data
-![alt text](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/main/imgs/pl_transform_formula1_data.PNG)
+![alt text](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/pl_transform_formula1_data.PNG)
 
