@@ -9,6 +9,11 @@ v_data_source = dbutils.widgets.get("p_data_source")
 
 # COMMAND ----------
 
+dbutils.widgets.text("p_file_date", "2021-03-21")
+v_file_date = dbutils.widgets.get("p_file_date")
+
+# COMMAND ----------
+
 # MAGIC %run "../includes/configuration"
 
 # COMMAND ----------
@@ -32,7 +37,7 @@ schema = "constructorId INTEGER, constructorRef STRING, name STRING, nationality
 
 constructors_df = spark.read\
 .schema(schema)\
-.json(f"{raw_folder_path}/constructors.json")
+.json(f"{raw_folder_path}/{v_file_date}/constructors.json")
 
 display(constructors_df)
 
@@ -60,7 +65,8 @@ from pyspark.sql.functions import lit
 
 constructors_renamed_df = constructors_dropped_df.withColumnRenamed("constructorId","constructor_id")\
                                                 .withColumnRenamed("constructorRef","constructor_ref")\
-                                                .withColumn("data_source", lit(v_data_source))
+                                                .withColumn("data_source", lit(v_data_source))\
+                                                .withColumn("file_date", lit(v_file_date))
 
 constructors_final_df = add_ingestion_date(constructors_renamed_df)
 display(constructors_final_df)
