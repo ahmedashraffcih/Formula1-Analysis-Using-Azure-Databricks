@@ -4,6 +4,19 @@
 
 # COMMAND ----------
 
+dbutils.widgets.text("p_data_source", "")
+v_data_source = dbutils.widgets.get("p_data_source")
+
+# COMMAND ----------
+
+# MAGIC %run "../includes/configuration"
+
+# COMMAND ----------
+
+# MAGIC %run "../includes/common_functions"
+
+# COMMAND ----------
+
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DoubleType, FloatType
 
 # COMMAND ----------
@@ -20,7 +33,7 @@ schema = StructType(fields=[StructField("raceId", IntegerType(), False),
 
 lap_times_df = spark.read\
 .schema(schema)\
-.csv('dbfs:/mnt/forumla1dl/raw/lap_times')
+.csv(f"{raw_folder_path}/lap_times")
 
 display(lap_times_df)
 
@@ -33,13 +46,17 @@ display(lap_times_df)
 
 # COMMAND ----------
 
-from pyspark.sql.functions import current_timestamp
+lap_times_with_ingestion_date_df = add_ingestion_date(lap_times_df)
 
 # COMMAND ----------
 
-lap_times_final_df = lap_times_df.withColumnRenamed("raceId","race_id")\
+from pyspark.sql.functions import lit
+
+# COMMAND ----------
+
+lap_times_final_df = lap_times_with_ingestion_date_df.withColumnRenamed("raceId","race_id")\
                                 .withColumnRenamed("driverId","driver_id")\
-                                .withColumn("ingestion_date",current_timestamp())
+                                .withColumn("data_source", lit(v_data_source))
 
 display(lap_times_final_df)
 
@@ -50,5 +67,9 @@ display(lap_times_final_df)
 
 # COMMAND ----------
 
-lap_times_final_df.write.mode("overwrite").parquet("/mnt/forumla1dl/processed/lap_times")
-display(spark.read.parquet("/mnt/forumla1dl/processed/lap_times"))
+lap_times_final_df.write.mode("overwrite").parquet(f"{processed_folder_path}/lap_times")
+display(spark.read.parquet(f"{processed_folder_path}/lap_times"))
+
+# COMMAND ----------
+
+dbutils.notebook.exit("Success")

@@ -4,6 +4,19 @@
 
 # COMMAND ----------
 
+dbutils.widgets.text("p_data_source", "")
+v_data_source = dbutils.widgets.get("p_data_source")
+
+# COMMAND ----------
+
+# MAGIC %run "../includes/configuration"
+
+# COMMAND ----------
+
+# MAGIC %run "../includes/common_functions"
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ##### Step 1 - Read JSON file using spark dataframe reader
 
@@ -36,7 +49,7 @@ schema = StructType(fields=[StructField("resultId", IntegerType(), False),
 
 results_df = spark.read\
 .schema(schema)\
-.json('dbfs:/mnt/forumla1dl/raw/results.json')
+.json(f"{raw_folder_path}/results.json")
 
 display(results_df)
 
@@ -47,7 +60,7 @@ display(results_df)
 
 # COMMAND ----------
 
-from pyspark.sql.functions import current_timestamp
+from pyspark.sql.functions import lit
 
 # COMMAND ----------
 
@@ -60,9 +73,11 @@ results_renamed_df = results_df.withColumnRenamed("resultId","result_id")\
                                 .withColumnRenamed("fastestLap","fastest_lap")\
                                 .withColumnRenamed("fastestLapTime","fastest_lap_time")\
                                 .withColumnRenamed("fastestLapSpeed","fastest_lap_speed")\
-                                .withColumn("ingestion_date",current_timestamp())
+                                .withColumn("data_source", lit(v_data_source))
 
-display(results_renamed_df)
+results_with_ingestion_date_df = add_ingestion_date(results_renamed_df)
+
+display(results_with_ingestion_date_df)
 
 # COMMAND ----------
 
@@ -71,7 +86,7 @@ display(results_renamed_df)
 
 # COMMAND ----------
 
-results_final_df = results_renamed_df.drop('statusId')
+results_final_df = results_with_ingestion_date_df.drop('statusId')
 
 display(results_final_df)
 
@@ -82,5 +97,9 @@ display(results_final_df)
 
 # COMMAND ----------
 
-results_final_df.write.mode("overwrite").partitionBy('race_id').parquet("/mnt/forumla1dl/processed/results")
-display(spark.read.parquet("/mnt/forumla1dl/processed/results"))
+results_final_df.write.mode("overwrite").partitionBy('race_id').parquet(f"{processed_folder_path}/results")
+display(spark.read.parquet(f"{processed_folder_path}/results"))
+
+# COMMAND ----------
+
+dbutils.notebook.exit("Success")

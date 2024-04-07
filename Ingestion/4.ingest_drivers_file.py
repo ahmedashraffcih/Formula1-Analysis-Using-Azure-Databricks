@@ -4,6 +4,19 @@
 
 # COMMAND ----------
 
+dbutils.widgets.text("p_data_source", "")
+v_data_source = dbutils.widgets.get("p_data_source")
+
+# COMMAND ----------
+
+# MAGIC %run "../includes/configuration"
+
+# COMMAND ----------
+
+# MAGIC %run "../includes/common_functions"
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ##### Step 1 - Read JSON file using spark dataframe reader
 
@@ -30,7 +43,7 @@ schema = StructType([StructField('driverId', IntegerType(), False),
 
 drivers_df = spark.read\
 .schema(schema)\
-.json('dbfs:/mnt/forumla1dl/raw/drivers.json')
+.json(f"{raw_folder_path}/drivers.json")
 
 display(drivers_df)
 
@@ -45,14 +58,18 @@ display(drivers_df)
 
 # COMMAND ----------
 
-from pyspark.sql.functions import current_timestamp, col, concat, lit
+from pyspark.sql.functions import col, concat, lit
 
 # COMMAND ----------
 
-drivers_with_columns_df = drivers_df.withColumnRenamed("driverId","driver_id")\
+drivers_with_ingestion_date_df = add_ingestion_date(drivers_df)
+
+# COMMAND ----------
+
+drivers_with_columns_df = drivers_with_ingestion_date_df.withColumnRenamed("driverId","driver_id")\
                                                 .withColumnRenamed("driverRef","driver_ref")\
-                                                .withColumn("ingestion_date",current_timestamp())\
-                                                .withColumn("name",concat(col("name.forename"),lit(' '),col("name.surname")))
+                                                .withColumn("name",concat(col("name.forename"),lit(' '),col("name.surname")))\
+                                                .withColumn("data_source", lit(v_data_source))
 
 display(drivers_with_columns_df)
 
@@ -77,5 +94,5 @@ display(drivers_final_df)
 
 # COMMAND ----------
 
-drivers_final_df.write.mode("overwrite").parquet("/mnt/forumla1dl/processed/drivers")
-display(spark.read.parquet("/mnt/forumla1dl/processed/drivers"))
+drivers_final_df.write.mode("overwrite").parquet(f"{processed_folder_path}/drivers")
+display(spark.read.parquet(f"{processed_folder_path}/drivers"))
