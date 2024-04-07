@@ -38,20 +38,20 @@ Ingest all 8 files into Azure data lake.
 
 ## Databricks Reports
 
-![dominant_drivers](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/dominant_drivers.PNG)
+![dominant_drivers](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/dominant_drivers.png)
 ![alt text](https://adb-8171827356927715.15.azuredatabricks.net/?o=8171827356927715#notebook/319754580399671/dashboard/319754580399698/present)
 
 
-![dominant_teams](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/dominant_teams.PNG)
+![dominant_teams](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/dominant_teams.png)
 
 ## Data Factory Pipeline
 
 #### pl_process_formula1_data
-![alt text](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/pl_process_formula1_data.PNG)
+![alt text](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/pl_process_formula1_data.png)
 
 #### pl_ingest_formula1_data
-![alt text](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/pl_ingest_formula1_data.PNG)
+![alt text](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/pl_ingest_formula1_data.png)
 
 #### pl_tranform_formula1_data
-![alt text](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/pl_transform_formula1_data.PNG)
+![alt text](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/pl_transform_formula1_data.png)
 
