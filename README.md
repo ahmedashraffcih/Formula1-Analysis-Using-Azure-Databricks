@@ -1,4 +1,5 @@
 # Formula1-Analysis-Using-Azure-Databricks
+
 ## Project Overview:
 Real World Project on Formula1 Racing using Azure Databricks, Delta Lake and orchestrated by Azure Data Factory.
 This project aims to provide a data analysis solution for Formula-1 race results using Azure Databricks. 
@@ -81,3 +82,18 @@ ORDER BY race_year, avg_points DESC
 #### pl_tranform_formula1_data
 ![alt text](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/pl_transform_formula1_data.png)
 
+## Contributing
+Contributions to enhance and expand the capabilities of this project are welcome! Please follow these guidelines:
+
+- Fork the repository.
+- Create a new branch for your feature or enhancement.
+- Commit your changes with descriptive messages.
+- Submit a pull request for review.
+
+## Contact
+For any inquiries or feedback, feel free to contact the project maintainer:
+
+Email - ahmedashraffcih@gmail.com <br>
+LinkedIn - [ahmedashraffcih](https://www.linkedin.com/in/ahmedashraffcih/)
+
+Feel free to customize and expand upon this README to better suit the specifics of your project.
