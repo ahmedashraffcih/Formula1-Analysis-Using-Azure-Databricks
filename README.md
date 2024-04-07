@@ -38,9 +38,35 @@ Ingest all 8 files into Azure data lake.
 
 ## Databricks Reports
 
-![dominant_drivers](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/dominant_drivers.png)
-![alt text](https://adb-8171827356927715.15.azuredatabricks.net/?o=8171827356927715#notebook/319754580399671/dashboard/319754580399698/present)
+### Dominant Driver
 
+~~~~sql
+SELECT race_year, 
+       driver_name,
+       COUNT(1) AS total_races,
+       SUM(calculated_points) AS total_points,
+       AVG(calculated_points) AS avg_points
+FROM f1_presentation.calculated_race_results
+WHERE driver_name IN (SELECT driver_name FROM v_dominant_drivers WHERE driver_rank <= 10)
+GROUP BY race_year, driver_name
+ORDER BY race_year, avg_points DESC
+~~~~
+
+![dominant_drivers](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/dominant_drivers.png)
+
+### Dominant Team
+
+~~~~sql
+SELECT race_year, 
+       team_name,
+       COUNT(1) AS total_races,
+       SUM(calculated_points) AS total_points,
+       AVG(calculated_points) AS avg_points
+  FROM f1_presentation.calculated_race_results
+ WHERE team_name IN (SELECT team_name FROM v_dominant_teams WHERE team_rank <= 5)
+GROUP BY race_year, team_name
+ORDER BY race_year, avg_points DESC
+~~~~
 
 ![dominant_teams](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/dominant_teams.png)
 
