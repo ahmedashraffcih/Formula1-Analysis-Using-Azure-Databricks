@@ -9,6 +9,11 @@ v_data_source = dbutils.widgets.get("p_data_source")
 
 # COMMAND ----------
 
+dbutils.widgets.text("p_file_date", "2021-03-21")
+v_file_date = dbutils.widgets.get("p_file_date")
+
+# COMMAND ----------
+
 # MAGIC %run "../includes/configuration"
 
 # COMMAND ----------
@@ -41,7 +46,7 @@ schema = StructType(fields=[StructField('raceId',IntegerType(), False),
 races_df = spark.read\
 .option('header',True)\
 .schema(schema)\
-.csv(f"{raw_folder_path}/races.csv")
+.csv(f"{raw_folder_path}/{v_file_date}/races.csv")
 
 # COMMAND ----------
 
@@ -67,7 +72,8 @@ from pyspark.sql.functions import to_timestamp, concat, col, lit
 # COMMAND ----------
 
 races_with_timestamp_df = races_df.withColumn("race_timestamp",to_timestamp(concat(col('date'), lit(' '), col('time')), 'yyyy-MM-dd HH:mm:ss'))\
-.withColumn("data_source", lit(v_data_source))
+.withColumn("data_source", lit(v_data_source))\
+.withColumn("file_date", lit(v_file_date))
 
 display(races_with_timestamp_df)
 
@@ -95,8 +101,12 @@ display(races_selected_df)
 
 # COMMAND ----------
 
-races_selected_df.write.mode("overwrite").partitionBy('race_year').format("parquet").saveAsTable("f1_processed.races")
-display(spark.read.parquet("/mnt/forumla1dl/processed/races"))
+races_selected_df.write.mode("overwrite").partitionBy('race_year').format("delta").saveAsTable("f1_processed.races")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT * FROM f1_processed.races
 
 # COMMAND ----------
 

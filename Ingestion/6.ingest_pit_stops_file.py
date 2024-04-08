@@ -11,6 +11,11 @@ v_data_source = dbutils.widgets.get("p_data_source")
 
 # COMMAND ----------
 
+dbutils.widgets.text("p_file_date", "2021-03-21")
+v_file_date = dbutils.widgets.get("p_file_date")
+
+# COMMAND ----------
+
 # MAGIC %run "../includes/configuration"
 
 # COMMAND ----------
@@ -37,7 +42,7 @@ schema = StructType(fields=[StructField("raceId", IntegerType(), False),
 pit_stops_df = spark.read\
 .schema(schema)\
 .option("multiLine", True) \
-.json(f"{raw_folder_path}/pit_stops.json")
+.json(f"{raw_folder_path}/{v_file_date}/pit_stops.json")
 
 display(pit_stops_df)
 
@@ -61,7 +66,8 @@ from pyspark.sql.functions import lit
 pit_stops_final_df = pit_stops_with_ingestion_date_df.withColumnRenamed("raceId","race_id")\
                                 .withColumnRenamed("driverId","driver_id")\
                                 .withColumn("ingestion_date",current_timestamp())\
-                                .withColumn("data_source", lit(v_data_source))
+                                .withColumn("data_source", lit(v_data_source))\
+                                .withColumn("file_date", lit(v_file_date))
 
 display(pit_stops_final_df)
 
@@ -72,8 +78,18 @@ display(pit_stops_final_df)
 
 # COMMAND ----------
 
-pit_stops_final_df.write.mode("overwrite").format("parquet").saveAsTable("f1_processed.pit_stops")
-display(spark.read.parquet(f"{processed_folder_path}/pit_stops"))
+#overwrite_partition(pit_stops_final_df, 'f1_processed', 'pit_stops', 'race_id')
+
+# COMMAND ----------
+
+merge_condition = "tgt.race_id = src.race_id AND tgt.driver_id = src.driver_id AND tgt.stop = src.stop AND tgt.race_id = src.race_id"
+merge_delta_data(pit_stops_final_df, 'f1_processed', 'pit_stops', processed_folder_path, merge_condition, 'race_id')
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT race_id, count(1) FROM f1_processed.pit_stops GROUP BY race_id
+# MAGIC ORDER BY race_id DESC
 
 # COMMAND ----------
 

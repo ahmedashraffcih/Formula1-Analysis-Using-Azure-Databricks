@@ -9,6 +9,11 @@ v_data_source = dbutils.widgets.get("p_data_source")
 
 # COMMAND ----------
 
+dbutils.widgets.text("p_file_date", "2021-03-21")
+v_file_date = dbutils.widgets.get("p_file_date")
+
+# COMMAND ----------
+
 # MAGIC %run "../includes/configuration"
 
 # COMMAND ----------
@@ -43,7 +48,7 @@ schema = StructType([StructField('driverId', IntegerType(), False),
 
 drivers_df = spark.read\
 .schema(schema)\
-.json(f"{raw_folder_path}/drivers.json")
+.json(f"{raw_folder_path}/{v_file_date}/drivers.json")
 
 display(drivers_df)
 
@@ -69,7 +74,8 @@ drivers_with_ingestion_date_df = add_ingestion_date(drivers_df)
 drivers_with_columns_df = drivers_with_ingestion_date_df.withColumnRenamed("driverId","driver_id")\
                                                 .withColumnRenamed("driverRef","driver_ref")\
                                                 .withColumn("name",concat(col("name.forename"),lit(' '),col("name.surname")))\
-                                                .withColumn("data_source", lit(v_data_source))
+                                                .withColumn("data_source", lit(v_data_source))\
+                                                .withColumn("file_date", lit(v_file_date))
 
 display(drivers_with_columns_df)
 
@@ -94,5 +100,13 @@ display(drivers_final_df)
 
 # COMMAND ----------
 
-drivers_final_df.write.mode("overwrite").format("parquet").saveAsTable("f1_processed.drivers")
-display(spark.read.parquet(f"{processed_folder_path}/drivers"))
+drivers_final_df.write.mode("overwrite").format("delta").saveAsTable("f1_processed.drivers")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT * FROM f1_processed.drivers
+
+# COMMAND ----------
+
+dbutils.notebook.exit("Success")
