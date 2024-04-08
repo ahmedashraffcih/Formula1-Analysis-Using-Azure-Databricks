@@ -11,7 +11,7 @@ v_data_source = dbutils.widgets.get("p_data_source")
 
 # COMMAND ----------
 
-dbutils.widgets.text("p_file_date", "2021-03-28")
+dbutils.widgets.text("p_file_date", "2021-03-21")
 v_file_date = dbutils.widgets.get("p_file_date")
 
 # COMMAND ----------
@@ -78,7 +78,12 @@ display(pit_stops_final_df)
 
 # COMMAND ----------
 
-overwrite_partition(pit_stops_final_df, 'f1_processed', 'pit_stops', 'race_id')
+#overwrite_partition(pit_stops_final_df, 'f1_processed', 'pit_stops', 'race_id')
+
+# COMMAND ----------
+
+merge_condition = "tgt.race_id = src.race_id AND tgt.driver_id = src.driver_id AND tgt.stop = src.stop AND tgt.race_id = src.race_id"
+merge_delta_data(pit_stops_final_df, 'f1_processed', 'pit_stops', processed_folder_path, merge_condition, 'race_id')
 
 # COMMAND ----------
 
