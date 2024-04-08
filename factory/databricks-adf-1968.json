@@ -1,0 +1,9 @@
+{
+	"name": "databricks-adf-1968",
+	"location": "uksouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "1c443cf9-5477-4461-a92f-aef0693a295d",
+		"tenantId": "b7df7360-e239-4439-a617-4094cbec4e60"
+	}
+}
