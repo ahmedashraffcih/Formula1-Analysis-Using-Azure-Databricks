@@ -80,7 +80,7 @@ ORDER BY race_year, avg_points DESC
 ![alt text](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/pl_ingest_formula1_data.png)
 
 #### pl_tranform_formula1_data
-![alt text](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/pl_transform_formula1_data.png)
+![alt text](https://github.com/ahmedashraffcih/Formula1-Analysis-Using-Azure-Databricks/blob/Setup/imgs/pl_tranform_formula1_data.png)
 
 ## Contributing
 Contributions to enhance and expand the capabilities of this project are welcome! Please follow these guidelines:
