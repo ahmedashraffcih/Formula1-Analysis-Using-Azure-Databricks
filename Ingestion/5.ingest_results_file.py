@@ -94,7 +94,14 @@ display(results_with_ingestion_date_df)
 
 results_final_df = results_with_ingestion_date_df.drop('statusId')
 
-display(results_final_df)
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC De-dupe the dataframe
+
+# COMMAND ----------
+
+results_deduped_df = results_final_df.dropDuplicates(['race_id', 'driver_id'])
 
 # COMMAND ----------
 
@@ -104,7 +111,7 @@ display(results_final_df)
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC Method 1
+# MAGIC ##### Method 1
 
 # COMMAND ----------
 
@@ -119,16 +126,20 @@ display(results_final_df)
 # COMMAND ----------
 
 # MAGIC %md 
-# MAGIC Method 2
+# MAGIC ##### Method 2
 
 # COMMAND ----------
 
-overwrite_partition(results_final_df, 'f1_processed', 'results', 'race_id')
+# overwrite_partition(results_final_df, 'f1_processed', 'results', 'race_id')
 
 # COMMAND ----------
 
-# merge_condition = "tgt.result_id = src.result_id AND tgt.race_id = src.race_id"
-# merge_delta_data(results_deduped_df, 'f1_processed', 'results', processed_folder_path, merge_condition, 'race_id')
+merge_condition = "tgt.result_id = src.result_id AND tgt.race_id = src.race_id"
+merge_delta_data(results_deduped_df, 'f1_processed', 'results', processed_folder_path, merge_condition, 'race_id')
+
+# COMMAND ----------
+
+dbutils.notebook.exit("Success")
 
 # COMMAND ----------
 
@@ -143,4 +154,9 @@ overwrite_partition(results_final_df, 'f1_processed', 'results', 'race_id')
 
 # COMMAND ----------
 
-dbutils.notebook.exit("Success")
+# MAGIC %sql
+# MAGIC SELECT race_id, driver_id, COUNT(1) 
+# MAGIC FROM f1_processed.results
+# MAGIC GROUP BY race_id, driver_id
+# MAGIC HAVING COUNT(1) > 1
+# MAGIC ORDER BY race_id, driver_id DESC;

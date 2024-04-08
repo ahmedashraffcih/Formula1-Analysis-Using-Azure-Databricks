@@ -79,8 +79,19 @@ display(qualifying_final_df)
 
 # COMMAND ----------
 
-overwrite_partition(qualifying_final_df, 'f1_processed', 'qualifying', 'race_id')
+# overwrite_partition(qualifying_final_df, 'f1_processed', 'qualifying', 'race_id')
+
+# COMMAND ----------
+
+merge_condition = "tgt.qualify_id = src.qualify_id AND tgt.race_id = src.race_id"
+merge_delta_data(qualifying_final_df, 'f1_processed', 'qualifying', processed_folder_path, merge_condition, 'race_id')
 
 # COMMAND ----------
 
 dbutils.notebook.exit("Success")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT race_id, count(1) FROM f1_processed.qualifying GROUP BY race_id
+# MAGIC ORDER BY race_id DESC
